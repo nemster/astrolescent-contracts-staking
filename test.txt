@@ -1,0 +1,17 @@
+resim reset
+resim new-account
+export account=account_sim1c956qr3kxlgypxwst89j9yf24tjc7zxd4up38x37zr6q4jxdx9rhma
+export owner_badge=resource_sim1nfzf2h73frult99zd060vfcml5kncq3mxpthusm9lkglvhsr0guahy
+resim new-token-fixed 1000
+export coin=resource_sim1t4kwg8fa7ldhwh8exe5w4acjhp9v982svmxp3yqa8ncruad4pf6m22
+resim publish .
+export package=package_sim1ph6xspj0xlmspjju2asxg7xnucy7tk387fufs4jrfwsvt85wvqf70a
+resim call-function ${package} ASTRLSTAKING new ${owner_badge} ${coin}
+export component=component_sim1cqtllx5p8c4s79y2cm4f385mz2pxp8q73fmuhzv358609364q5uudn
+export pool=pool_sim1csujp6stqy6jnwcv6el9hu9hzne39y870wkyxj4jsnl2s9jpre8pnm
+export staked_coin=resource_sim1tkq4le7dpzucmpnksxj5ku28r3t776pgk879cahgm76c2kfpgm5nqy
+resim call-method ${component} deposit_rewards $coin:900 --proofs "${owner_badge}:#1#"
+resim call-method ${component} add_stake $coin:100
+resim call-method ${component} airdrop_deposited_amount 100 --proofs "${owner_badge}:#1#"
+resim call-method ${component} remove_stake ${staked_coin}:100
+

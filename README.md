@@ -1,11 +1,11 @@
-# Astrolescent Staking contract
+# Astrolescent Staking contract ("rug proof" version)
  
 Below are the transaction manifests needed to use the contract:
 
-## instantiate
+## instantiate (stokenet)
 ```
 CALL_FUNCTION
-  Address("package_rdx1p5wvlpyy3f0mer3vux0rh9wsak2d8jng9967am5udzmakz2y5g6wzs")
+  Address("package_tdx_2_1p50vvget87alvsjwqhpv8m0exwq6zu32ppnuys5zjx9epjyuuuu7ay")
   "ASTRLSTAKING"
   "new"
   Address("<OWNER_BADGE>")
@@ -98,5 +98,57 @@ CALL_METHOD
 	Address("<STAKE_COMPONENT_ADDRESS>")
 	"airdrop"
 	Bucket("tokens")
+;
+```
+
+## deposit rewards
+
+The owner can use this method to lock all of the future staking rewards, there will be no way to get them back.
+```
+
+CALL_METHOD
+  Address("<ACCOUNT_HOLDING_OWNER_BADGE>")
+    "create_proof_of_non_fungibles"
+    Address("<OWNER_BADGE>")
+    Array<NonFungibleLocalId>(
+        NonFungibleLocalId("#1#")
+    )
+;
+
+CALL_METHOD
+  Address("<ACCOUNT>")
+  "withdraw"
+  Address("<RESOURCE_ADDRESS_TO_STAKE>")
+  Decimal("<AMOUNT>")
+;
+
+TAKE_ALL_FROM_WORKTOP
+  Address("<RESOURCE_ADDRESS_TO_STAKE>")
+  Bucket("tokens")
+;
+
+CALL_METHOD
+  Address("<STAKE_COMPONENT_ADDRESS>")
+  "deposit rewards"
+  Bucket("tokens")
+;
+```
+
+## airdrop part of the previosly deposited coins
+```
+
+CALL_METHOD
+  Address("<ACCOUNT_HOLDING_OWNER_BADGE>")
+    "create_proof_of_non_fungibles"
+    Address("<OWNER_BADGE>")
+    Array<NonFungibleLocalId>(
+        NonFungibleLocalId("#1#")
+    )
+;
+
+CALL_METHOD
+  Address("<STAKE_COMPONENT_ADDRESS>")
+  "airdrop_deposited_amount"
+  Decimal("AMOUNT TO DISTRIBUTE")
 ;
 ```

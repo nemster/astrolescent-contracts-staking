@@ -10,6 +10,8 @@ mod ASTRLSTAKING {
             add_stake => PUBLIC; 
             remove_stake => PUBLIC; 
             airdrop => restrict_to: [OWNER];
+            deposit_rewards => restrict_to: [OWNER];
+            airdrop_deposited_amount => restrict_to: [OWNER];
             
         }
     
@@ -18,6 +20,7 @@ mod ASTRLSTAKING {
     struct ASTRLSTAKING {
 
         sastrl: Global<OneResourcePool>,
+        future_rewards: Vault,
 
     }
 
@@ -38,7 +41,8 @@ mod ASTRLSTAKING {
 
             let mut component = Self {
 
-                sastrl
+                sastrl: sastrl,
+                future_rewards: Vault::new(ra),
 
             }
 
@@ -70,6 +74,20 @@ mod ASTRLSTAKING {
 
             self.sastrl.protected_deposit(astrl);
             return
+
+        }
+
+        pub fn deposit_rewards(&mut self, astrl: Bucket) {
+
+            self.future_rewards.put(astrl);
+
+        }
+
+        pub fn airdrop_deposited_amount(&mut self, amount: Decimal){
+
+            self.sastrl.protected_deposit(
+                self.future_rewards.take(amount)
+            );
 
         }
 
