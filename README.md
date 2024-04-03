@@ -13,6 +13,17 @@ CALL_FUNCTION
 ;
 ```
 
+## instantiate (mainnet)
+```
+CALL_FUNCTION
+  Address("package_rdx1p5zklqgyeaje7zm6tx3v9zmcqszecqdw0y9za9tw8pehkv87wa4ykm")
+  "ASTRLSTAKING"
+  "new"
+  Address("<OWNER_BADGE>")
+  Address("<RESOURCE_ADDRESS_TO_STAKE>")
+;
+```
+
 ## add stake
 ```
 CALL_METHOD
@@ -129,7 +140,7 @@ TAKE_ALL_FROM_WORKTOP
 
 CALL_METHOD
   Address("<STAKE_COMPONENT_ADDRESS>")
-  "deposit rewards"
+  "deposit_rewards"
   Bucket("tokens")
 ;
 ```
