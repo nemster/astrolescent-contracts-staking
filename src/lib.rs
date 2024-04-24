@@ -174,6 +174,11 @@ mod astrl_staking {
             .non_fungible::<ClaimNFT>()
             .data();
 
+            assert!(
+                non_fungible_data.claim_date.seconds_since_unix_epoch <= Clock::current_time_rounded_to_minutes().seconds_since_unix_epoch,
+                "Not ready to be claimed",
+            );
+
             claim_nft.burn();
 
             return self.pending_unstake_vaults.get_mut(&non_fungible_data.id)

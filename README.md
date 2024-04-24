@@ -11,7 +11,7 @@ Below are the transaction manifests needed to use the contract:
 ## instantiate (stokenet)
 ```
 CALL_FUNCTION
-  Address("package_tdx_2_1p4ypszwadh75faw88v2yqpr3jj7vaw87vvjr4c5wskgfnneteu7w2e")
+  Address("package_tdx_2_1pkvqy92x2wsp9rpdg5xtuqy9m8ux5vyrnhdlfsgjyylplqlywz08w0")
   "AstrlStaking"
   "new"
   Address("<OWNER_BADGE>")

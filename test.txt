@@ -6,12 +6,14 @@ resim new-token-fixed 1000
 export coin=resource_sim1t4kwg8fa7ldhwh8exe5w4acjhp9v982svmxp3yqa8ncruad4pf6m22
 resim publish .
 export package=package_sim1ph6xspj0xlmspjju2asxg7xnucy7tk387fufs4jrfwsvt85wvqf70a
-resim call-function ${package} ASTRLSTAKING new ${owner_badge} ${coin}
+resim call-function ${package} AstrlStaking new ${owner_badge} ${coin} 60
 export component=component_sim1cqtllx5p8c4s79y2cm4f385mz2pxp8q73fmuhzv358609364q5uudn
 export pool=pool_sim1csujp6stqy6jnwcv6el9hu9hzne39y870wkyxj4jsnl2s9jpre8pnm
 export staked_coin=resource_sim1tkq4le7dpzucmpnksxj5ku28r3t776pgk879cahgm76c2kfpgm5nqy
+export claim_nft=resource_sim1ntdgqm3rcfxp74xt8acqga9pqqem9kxkn42u54shejj8qjzatlk3w7
 resim call-method ${component} deposit_rewards $coin:900 --proofs "${owner_badge}:#1#"
 resim call-method ${component} add_stake $coin:100
 resim call-method ${component} airdrop_deposited_amount 100 --proofs "${owner_badge}:#1#"
 resim call-method ${component} remove_stake ${staked_coin}:100
-
+resim set-current-time 2030-01-01T00:00:00Z
+resim call-method ${component} claim_unstaked_coins "${claim_nft}:#1#"
