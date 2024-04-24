@@ -1,7 +1,7 @@
 use scrypto::prelude::*;
 
 #[blueprint]
-mod ASTRLSTAKING {
+mod astrl_staking {
 
     // Setting the access rules 
     enable_method_auth! { 
@@ -17,17 +17,17 @@ mod ASTRLSTAKING {
     
     }
 
-    struct ASTRLSTAKING {
+    struct AstrlStaking {
 
         sastrl: Global<OneResourcePool>,
         future_rewards: Vault,
 
     }
 
-    impl ASTRLSTAKING {
+    impl AstrlStaking {
         pub fn new(owner_badge: ResourceAddress, ra: ResourceAddress) -> Global<OneResourcePool> {
 
-            let (address_reservation, component_address) = Runtime::allocate_component_address(ASTRLSTAKING::blueprint_id());
+            let (address_reservation, component_address) = Runtime::allocate_component_address(AstrlStaking::blueprint_id());
             let global_component_caller_badge = NonFungibleGlobalId::global_caller_badge(component_address);
 
             let owner_role = OwnerRole::Fixed(rule!(require(owner_badge)));
@@ -39,7 +39,7 @@ mod ASTRLSTAKING {
                 None
             );
 
-            let mut component = Self {
+            Self {
 
                 sastrl: sastrl,
                 future_rewards: Vault::new(ra),
