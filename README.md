@@ -1,26 +1,22 @@
-# Astrolescent Staking contract ("rug proof" version)
+# Astrolescent Staking contract (customised)
+
+This fork adds two features to the Astrolescent Staking contract:  
+
+- rug proof: the owner can deposit ahead of time all of the future staking rewards with no way to get them back (`deposit_rewards` method). The deposited staking rewards can then be distributed calling the `airdrop_deposited_amount` method.  
+
+- optional `locking_period`: by specifying a non zero `<LOCKING_PERIOD>` during component instantiation (function `new`), the owner can make so that at the unstake a `ClaimNFT` is returned instead of the staked coins. The ClaimNFT clearly shows in the user's wallet the unstaked `amount` and the `claim_date` and can be redeemed via the `claim_unstaked_coins` method when the `locking_period` ends.  
  
-Below are the transaction manifests needed to use the contract:
+Below are the transaction manifests needed to use the contract:  
 
 ## instantiate (stokenet)
 ```
 CALL_FUNCTION
-  Address("package_tdx_2_1p50vvget87alvsjwqhpv8m0exwq6zu32ppnuys5zjx9epjyuuuu7ay")
-  "ASTRLSTAKING"
+  Address("package_tdx_2_1p4ypszwadh75faw88v2yqpr3jj7vaw87vvjr4c5wskgfnneteu7w2e")
+  "AstrlStaking"
   "new"
   Address("<OWNER_BADGE>")
   Address("<RESOURCE_ADDRESS_TO_STAKE>")
-;
-```
-
-## instantiate (mainnet)
-```
-CALL_FUNCTION
-  Address("package_rdx1p5zklqgyeaje7zm6tx3v9zmcqszecqdw0y9za9tw8pehkv87wa4ykm")
-  "ASTRLSTAKING"
-  "new"
-  Address("<OWNER_BADGE>")
-  Address("<RESOURCE_ADDRESS_TO_STAKE>")
+  <LOCKING_PERIOD>i64
 ;
 ```
 
@@ -161,5 +157,33 @@ CALL_METHOD
   Address("<STAKE_COMPONENT_ADDRESS>")
   "airdrop_deposited_amount"
   Decimal("AMOUNT TO DISTRIBUTE")
+;
+```
+
+## redeem previously unstaked coins
+```
+
+CALL_METHOD
+    Address("<ACCOUNT>")
+    "withdraw_non_fungibles"
+    Address("<CLAIM_NFT_ADDRESS>")
+    Array<NonFungibleLocalId>(NonFungibleLocalId("<CLAIM_NFT_ID>"))
+;
+
+TAKE_ALL_FROM_WORKTOP
+  Address("<CLAIM_NFT_ADDRESS>")
+  Bucket("claim_nft")
+;
+
+CALL_METHOD
+  Address("<STAKE_COMPONENT_ADDRESS>")
+  "claim_unstaked_coins"
+  Bucket("claim_nft")
+;
+
+CALL_METHOD
+    Address("<ACCOUNT>")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP")
 ;
 ```
